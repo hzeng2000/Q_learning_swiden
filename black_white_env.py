@@ -337,15 +337,15 @@ class Maze(tk.Tk, object):
         if flag == 1:
             reward = reward + 8
             done = False
-            s2_ = 'terminal'
         # terminated
-        if s1_[0] == (5 + 14 * UNIT):
+        if s1_[0] == (5 + 15 * UNIT):
             s1_ = 'terminal'
+            s2_ = 'terminal'
             done = True
         return [s1_, s2_], reward, done
 
     def render(self):
-        time.sleep(0.5)
+        time.sleep(0.4)
         self.update()
 
 
@@ -356,7 +356,7 @@ def update():
             env.render()
             a1 = 1
             a2 = 1
-            s1, s2, r, done = env.step(a1, a2)
+            [s1, s2], r, done = env.step(a1, a2)
             if done:
                 break
 

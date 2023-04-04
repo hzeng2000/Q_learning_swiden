@@ -8,7 +8,7 @@ import pandas as pd
 
 
 class QLearningTable:
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, total_episode=100):
         self.actions = actions  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
@@ -16,9 +16,12 @@ class QLearningTable:
         # in this case, Frame vertical axis is the state(eg. 0,1,2,3...); horizon axis is the actions
         # in this case, actions are up, down, left, right
         self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
+        self.total_episode = total_episode
 
-    def choose_action(self, observation):
+    def choose_action(self, observation, episode):
         self.check_state_exist(observation)
+        if episode > 0.6*self.total_episode:
+            self.epsilon = 1
         # action selection
         if np.random.uniform() < self.epsilon:
             # choose best action
@@ -34,6 +37,7 @@ class QLearningTable:
         self.check_state_exist(s_)
         q_predict = self.q_table.loc[s, a]
         if s_ != 'terminal':
+        # if not done:
             q_target = r + self.gamma * self.q_table.loc[s_, :].max()  # next state is not terminal
         else:
             q_target = r  # next state is terminal
